@@ -1,3 +1,4 @@
+from .validation import custom_validation
 from .models.Post import Post
 from.serializers import PostSerializer
 from django.http import Http404
@@ -71,15 +72,10 @@ def logout_view(request):
 @api_view(['GET'])
 @permission_classes((permissions.AllowAny,))
 def current_user(request):
-    print("session is: ", request)
-    
     r_user = get_user(request)
-    print(r_user)
     if r_user.id != None:
         user = User.objects.get(id=r_user.id)
         serializer= UserSerializer(user, context={'request': request})
-      
-        print(serializer.data)
         return Response(serializer.data, status=status.HTTP_200_OK)
     return Response(({"message":"user not signed in"}), status=status.HTTP_200_OK)
     # Redirect to a success page.     
@@ -90,24 +86,21 @@ class PostList(APIView):
     """
     List all posts, or create a post.
     """
-    @permission_classes((permissions.AllowAny,))
-    @csrf_exempt
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+    authentication_classes = (SessionAuthentication,)
+   
     def get(self, request, format=None):
         posts = Post.objects.all()
         serializer = PostSerializer(posts, many=True)
         return Response(serializer.data)
         
     
-    @permission_classes((permissions.IsAuthenticated, ))
-    @authentication_classes((SessionAuthentication,))
+    
+    
     def post(self, request, format=None):
-        print(request.data)
-
         serializer = PostSerializer(data=request.data)
-        print(serializer.is_valid())
-       
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(owner=self.request.user)
             print(serializer.data)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -119,7 +112,7 @@ class PostDetail(APIView):
     """
     Retrieve, update or delete a snippet instance.
     """
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
     authentication_classes = (SessionAuthentication,)
     
     def get_object(self, pk):
@@ -143,6 +136,7 @@ class PostDetail(APIView):
 
     def delete(self, request, pk, format=None):
         post = self.get_object(pk)
+        self.check_object_permissions(request=request, obj=post)
         post.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     
@@ -155,18 +149,20 @@ class UserList(APIView):
     ]
 
     def post(self, request, format=None):
-        serializer = UserSerializer(data=request.data)
+       
         print("request body: ", request.data)
         password = request.data["password"]
         confirmation = request.data["confirmPassword"]
         if not (password and confirmation and password == confirmation):
             return Response({"errors": "Password and Confirm Password must be the same"}, status=status.HTTP_400_BAD_REQUEST)
 
-        print(serializer.is_valid(raise_exception=True))
+        incoming_data = custom_validation(request.data)
+        serializer = UserSerializer(data=incoming_data)
+        print("the serializer is ", serializer.is_valid())
         print(serializer.errors)
         if serializer.is_valid():
-            serializer.save()
-
+            serializer.create(incoming_data)
+            print("saving user")
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

@@ -7,9 +7,12 @@ import Button from "react-bootstrap/Button";
 import Navbar from "../../components/Navbar";
 import Cookies from "js-cookie";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 export default function Login() {
   const [username, setUsername] = useState("");
+  const [error, setErrors] = useState("")
+  const router = useRouter();
 
   const [password, setPassword] = useState("");
   let session = ''
@@ -21,42 +24,37 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const submitData = { username, password };
-    console.log(JSON.stringify(submitData));
-    console.log("the csrf thing is: ")
+
 
     try {
 
-      // const res = await axios({
-      //   method: 'POST',
-      //   url: "http://localhost:8000/login/",
-      //   body:
-      //   headers: {
-      //     "Content-Type": "application/json"
-      //   },
-    
-      // })
-      
+
       const res = await fetch("http://localhost:8000/login/", {
         method: "POST",
         body: JSON.stringify(submitData),
         headers: {
           "content-type": "application/json",
         },
-        
-        credentials: "include",
-        
-        
-      });
-      console.log(await res.json());
-      if (res.ok) {
-        console.log("Yeah!");
-        
 
-      } else {
-        console.log("Oops! Something is wrong.");
+        credentials: "include",
+
+
+      });
+      
+      if (res.ok) {
+        router.push("/");
+
+
+      } 
+      else {
+     
+      
+        setErrors(await res.json())
       }
     } catch (error) {
-      console.log(error);
+     
+    
+      
     }
 
     setUsername("");
@@ -64,11 +62,18 @@ export default function Login() {
   };
   return (
     <div>
+
       <Navbar></Navbar>
+
+
+
       <div className="Auth-form-container">
         <Form className="Auth-form" onSubmit={handleSubmit}>
           <div className="Auth-form-content">
             <Form.Group>
+              <div hidden={!error} class="p-4 mb-4 text-sm text-yellow-800 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300" role="alert">
+                <span class="font-medium">Error!</span> {error.errors}
+              </div>
               <div className="form-group mt-3">
                 <Form.Label className="form-control mt-1">Username</Form.Label>
                 <Form.Control

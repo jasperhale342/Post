@@ -6,6 +6,9 @@ node_modules
 /.pnp
 .pnp.js
 /.next
+.env
+.pg_service.conf
+.my_pgpass
 
 # testing
 /coverage

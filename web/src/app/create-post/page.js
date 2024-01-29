@@ -105,9 +105,9 @@ const CreatePost = (props) => {
 
               <Form.Control
                 as="textarea"
-                className="shadow appearance-none border border-black-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+                className="shadow appearance-none h-100 resize-none border border-black-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
                 value={content}
-                rows={10}
+      
                 maxLength={300}
                 onChange={(e) => setContent(e.target.value)}
               />

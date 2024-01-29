@@ -1,10 +1,13 @@
+"use client"
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 const Navbar = () => {
     const [username, setUsername] = useState("");
+    const router = useRouter();
     let data = ''
     const logout = async (e) => {
         const res = await fetch("http://localhost:8000/logout/", {
@@ -15,6 +18,11 @@ const Navbar = () => {
             credentials: "include"
 
         });
+        if (res.ok){
+            setUsername("")
+            router.refresh()
+        }
+        
     }
     useEffect(() => {
         async function fetchMyAPI() {
@@ -56,6 +64,12 @@ const Navbar = () => {
                             <li className='link'>
                                 <Link href='/create-post' >
                                     Create Post
+                                </Link>
+
+                            </li>
+                            <li className='link'>
+                                <Link href='/user' >
+                                    Hello {username}
                                 </Link>
 
                             </li>

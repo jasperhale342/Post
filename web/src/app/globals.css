@@ -68,6 +68,9 @@
   border-radius: 8px;
   background-color: white;
 }
+.form-post-inner {
+  height: 90%;
+}
 
 .Auth-form-content {
   padding-left: 12%;
