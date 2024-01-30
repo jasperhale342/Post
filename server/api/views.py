@@ -150,7 +150,7 @@ class UserList(APIView):
 
     def post(self, request, format=None):
         print(request.body)
-        serializer = UserSerializer(data=request.body.decode("utf-8") )
+        serializer = UserSerializer(data=request.body.decode("utf-8")   )
         print("the serializer is ", serializer.is_valid())
         print(serializer.errors)
         if serializer.is_valid():
