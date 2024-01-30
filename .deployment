@@ -1,5 +1,2 @@
 [config]
-SCM_DO_BUILD_DURING_DEPLOYMENT=true
-@echo off
-echo Deploying Functions ...
-xcopy "%DEPLOYMENT_SOURCE%\POST\server" %DEPLOYMENT_TARGET% /Y /S
+
