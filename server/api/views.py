@@ -149,19 +149,12 @@ class UserList(APIView):
     ]
 
     def post(self, request, format=None):
-       
-        print("request body: ", request.data)
-        password = request.data["password"]
-        confirmation = request.data["confirmPassword"]
-        if not (password and confirmation and password == confirmation):
-            return Response({"errors": "Password and Confirm Password must be the same"}, status=status.HTTP_400_BAD_REQUEST)
-
-        incoming_data = custom_validation(request.data)
-        serializer = UserSerializer(data=incoming_data)
+        print(request.body)
+        serializer = UserSerializer(data=request.body.decode("utf-8") )
         print("the serializer is ", serializer.is_valid())
         print(serializer.errors)
         if serializer.is_valid():
-            serializer.create(incoming_data)
+            serializer.save()
             print("saving user")
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -6,6 +6,7 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { useRouter } from "next/router";
 import Navbar from "../../components/Navbar";
+import axios from "axios";
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -14,7 +15,7 @@ export default function Login() {
 
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const [errors, setError] = useState("");
+  const [error, setErrors] = useState("")
 
   function validateForm() {
     return username.length > 0 && password.length > 0;
@@ -23,31 +24,37 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const submitData = { username, password, confirmPassword };
-    if (confirmPassword != password) {
-      setError("passwords do not match");
-      return;
-    }
+   
 
     try {
-      const res = await fetch("http://localhost:8000/users/", {
+      const res = await axios({
         method: "POST",
-        body: JSON.stringify(submitData),
+        url: "http://localhost:8000/users/",
         headers: {
-          "content-type": "application/json",
+          "Content-Type": "application/json",
         },
+        data:JSON.stringify(submitData),
+        withCredentials: true,
       });
-      console.log(res.json());
+      // const res = await fetch("http://localhost:8000/users/", {
+      //   method: "POST",
+      //   body: JSON.stringify(submitData),
+      //   headers: {
+      //     "content-type": "application/json",
+      //   },
+      // });
+      console.log(res.data);
       if (res.ok) {
         console.log("Yeai!");
       } else {
-        console.log("Oops! Something is wrong.");
+        setErrors("")
       }
     } catch (error) {
       console.log(error);
     }
     setUsername("");
     setPassword("");
-    setError("");
+   
   };
   return (
     <div>
@@ -56,7 +63,10 @@ export default function Login() {
         <Form className="Auth-form" onSubmit={handleSubmit}>
           <div className="Auth-form-content">
             <Form.Group>
-              <div className="text-red-600 text-center">{errors}</div>
+            <div hidden={false} className="p-4 mb-4 text-sm text-yellow-800 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300" role="alert">
+                <span className="font-medium">Error!</span> 
+              </div>
+              <div className="text-red-600 text-center">{}</div>
               <h3 className="Auth-form-title">Create Account</h3>
               <div className="form-group mt-3">
                 <Form.Label className="form-control mt-1">username</Form.Label>

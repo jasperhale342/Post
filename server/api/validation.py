@@ -15,7 +15,7 @@ def custom_validation(data):
         raise ValidationError('choose another password, min 4 characters')
     ##
     if password != confirm_password:
-        raise ValidationError('confirm password and password must be the same')
+        raise ValidationError({"errors":'confirm password and password must be the same'})
     return data
 
 
