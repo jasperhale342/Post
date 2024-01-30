@@ -15,6 +15,7 @@ const CreatePost = (props) => {
   const [owner, setUsername] = useState("");
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [postMessage, setPostMessage] = useState(false)
   const router = useRouter();
   let data = ''
 
@@ -22,37 +23,30 @@ const CreatePost = (props) => {
     return title.length > 0 && content.length > 0;
   }
 
-  
+
   useEffect(() => {
     async function fetchMyAPI() {
+     
 
-        const res = await axios({
-            method: 'GET',
-            url: "http://localhost:8000/current-user/",
-            withCredentials: true
+      const res = await axios({
+        method: 'GET',
+        url: "http://localhost:8000/current-user/",
+        withCredentials: true
 
 
-        })
-        data = await res.data
-        setUsername(data['id'])
+      })
+      data = await res.data
+      setUsername(data['id'])
     }
 
     fetchMyAPI()
-}, [])
+  }, [])
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const submitData = {owner, title, content };
+    setPostMessage(false)
+    const submitData = { owner, title, content };
 
     try {
-      // const res = await axios({
-      //   method: 'POST',
-      //   url: "http://localhost:8000/login/",
-      //   body:
-      //   headers: {
-      //     "Content-Type": "application/json"
-      //   },
-
-      // })
       let myHeaders = new Headers({
         "Content-Type": "application/json",
         "X-CSRFToken": Cookies.get('csrftoken')
@@ -63,11 +57,12 @@ const CreatePost = (props) => {
         body: JSON.stringify(submitData),
         headers: myHeaders,
         credentials: "include"
-      
+
       });
       console.log(res);
       if (res.ok) {
-        console.log("success");
+        console.log(res);
+        setPostMessage(true)
       } else {
         console.log("Oops! Something is wrong.");
       }
@@ -85,6 +80,9 @@ const CreatePost = (props) => {
         <Form className="form-post" onSubmit={handleSubmit}>
           <div className="Auth-form-content">
             <Form.Group>
+              <div hidden={!postMessage} className="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
+                <span class="font-medium">Success alert!</span> Post Created! Check out the home page
+              </div>
               <div className="form-group mt-3">
                 <Form.Label className="form-control mt-1">
                   Post Title
@@ -107,7 +105,7 @@ const CreatePost = (props) => {
                 as="textarea"
                 className="shadow appearance-none h-100 resize-none border border-black-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
                 value={content}
-      
+
                 maxLength={300}
                 onChange={(e) => setContent(e.target.value)}
               />

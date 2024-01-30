@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
 
 import Button from "react-bootstrap/Button";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import Navbar from "../../components/Navbar";
 import axios from "axios";
 
@@ -16,6 +16,7 @@ export default function Login() {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const [error, setErrors] = useState("")
+  const router = useRouter()
 
   function validateForm() {
     return username.length > 0 && password.length > 0;
@@ -24,7 +25,7 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const submitData = { username, password, confirmPassword };
-   
+
 
     try {
       const res = await axios({
@@ -33,28 +34,29 @@ export default function Login() {
         headers: {
           "Content-Type": "application/json",
         },
-        data:JSON.stringify(submitData),
+        data: JSON.stringify(submitData),
         withCredentials: true,
       });
-      // const res = await fetch("http://localhost:8000/users/", {
-      //   method: "POST",
-      //   body: JSON.stringify(submitData),
-      //   headers: {
-      //     "content-type": "application/json",
-      //   },
-      // });
-      console.log(res.data);
-      if (res.ok) {
+
+
+      if (res.status == '201') {
         console.log("Yeai!");
-      } else {
         setErrors("")
+        setUsername("");
+        setPassword("");
+        setConfirmPassword("")
+        
+        router.push("/")
+      } else {
+        console.log(res);
       }
     } catch (error) {
-      console.log(error);
+      setErrors(error.response.data.error)
+      setPassword("");
+      setConfirmPassword("")
     }
-    setUsername("");
-    setPassword("");
-   
+
+
   };
   return (
     <div>
@@ -63,10 +65,10 @@ export default function Login() {
         <Form className="Auth-form" onSubmit={handleSubmit}>
           <div className="Auth-form-content">
             <Form.Group>
-            <div hidden={false} className="p-4 mb-4 text-sm text-yellow-800 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300" role="alert">
-                <span className="font-medium">Error!</span> 
+              <div hidden={!error} className="p-4 mb-4 text-sm text-yellow-800 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300" role="alert">
+                <span className="font-medium">Error!</span> {error}
               </div>
-              <div className="text-red-600 text-center">{}</div>
+              <div className="text-red-600 text-center">{ }</div>
               <h3 className="Auth-form-title">Create Account</h3>
               <div className="form-group mt-3">
                 <Form.Label className="form-control mt-1">username</Form.Label>
@@ -83,7 +85,7 @@ export default function Login() {
             <Form.Group
               className="form-group mt-3"
               size="lg"
-              controlId="password"
+              
             >
               <Form.Label className="form-control mt-1">Password</Form.Label>
 

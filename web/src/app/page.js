@@ -6,6 +6,8 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import ReactPaginate from "react-paginate";
 import Form from "react-bootstrap/Form";
+import { useRouter } from "next/navigation";
+
 
 function Items({ currentItems }) {
   return (
@@ -26,6 +28,7 @@ function printPosts(e) {
 function Home() {
   const [me, setMe] = useState("");
   const [allPosts, dataSet] = useState("");
+  const router = useRouter();
   // Here we use item offsets; we could also use page offsets
   // following the API or data you're working with.
   // const [itemOffset, setItemOffset] = useState(0);
@@ -57,7 +60,25 @@ function Home() {
       },
       withCredentials: true,
     });
+    getPosts()
+
   }
+  let getPosts = React.useCallback(async () => {
+    const posts = await axios({
+      method: "GET",
+      url: "http://localhost:8000/posts/",
+      withCredentials: true,
+    });
+    console.log("hello")
+    dataSet(posts.data);
+
+    router.refresh()
+  }, [])
+
+  function checkUser (event) {
+    setMe(event);
+  }
+ 
 
   useEffect(() => {
     async function fetchMyAPI() {
@@ -73,25 +94,17 @@ function Home() {
       console.log(res.data);
       setMe(res.data["username"])
     }
-    async function getPosts() {
-      const posts = await axios({
-        method: "GET",
-        url: "http://localhost:8000/posts/",
-        withCredentials: true,
-      });
-      console.log(posts.data);
-      dataSet(posts.data);
-    }
+
 
     fetchMyAPI();
     getPosts();
     console.log(allPosts);
     // console.log("data is: " + data)
-  }, []);
+  }, [getPosts]);
 
   return (
     <div>
-      <Navbar></Navbar>
+      <Navbar checkUser={checkUser} state={me}></Navbar>
 
       {allPosts
         ? allPosts.map((post, index) => (
@@ -101,16 +114,16 @@ function Home() {
                 <div className="Auth-form-content">
                   <Form.Group>
                     <div className="form-group mt-3">
-                    
-                      <Form.Label className="form-control mt-1">
-                      <NextLink
-                    
-                      type="button"
-                      href={post.owner == me ? `/post/edit/${post.id}`:`/post/${post.id}`}
 
-                    >
-                     {post.title}
-                    </NextLink>
+                      <Form.Label className="form-control mt-1">
+                        <NextLink
+
+                          type="button"
+                          href={post.owner == me ? `/post/edit/${post.id}` : `/post/${post.id}`}
+
+                        >
+                          {post.title}
+                        </NextLink>
                       </Form.Label>
 
                     </div>

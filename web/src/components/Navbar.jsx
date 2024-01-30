@@ -5,8 +5,9 @@ import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-const Navbar = () => {
+const Navbar = ({checkUser, state}) => {
     const [username, setUsername] = useState("");
+    
     const router = useRouter();
     let data = ''
     const logout = async (e) => {
@@ -19,8 +20,8 @@ const Navbar = () => {
 
         });
         if (res.ok){
+            checkUser("")
             setUsername("")
-            router.refresh()
         }
         
     }
