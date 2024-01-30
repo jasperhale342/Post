@@ -90,7 +90,7 @@ class PostList(APIView):
     authentication_classes = (SessionAuthentication,)
    
     def get(self, request, format=None):
-        posts = Post.objects.all()
+        posts = Post.objects.all().order_by('-created_at')
         serializer = PostSerializer(posts, many=True)
         return Response(serializer.data)
         
@@ -101,7 +101,6 @@ class PostList(APIView):
         serializer = PostSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(owner=self.request.user)
-            print(serializer.data)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
@@ -150,11 +149,14 @@ class UserList(APIView):
 
     def post(self, request, format=None):
         print(request.body)
-        serializer = UserSerializer(data=request.body.decode("utf-8")   )
+        my_json = request.body.decode('utf8').replace("'", '"')
+        data = json.loads(my_json)
+        serializer = UserSerializer(data=data)
         print("the serializer is ", serializer.is_valid())
         print(serializer.errors)
         if serializer.is_valid():
-            serializer.save()
+            user = serializer.save()
+            login(request, user)
             print("saving user")
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

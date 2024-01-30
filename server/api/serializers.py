@@ -24,13 +24,13 @@ class UserSerializer(serializers.ModelSerializer):
         confirm_password = attrs['confirmPassword'].strip()
         ##
         if not username or User.objects.filter(username=username).exists():
-            raise serializers.ValidationError('choose another username')
+            raise serializers.ValidationError({"error":'choose another username'})
         ##
         if not password or len(password) < 4:
-            raise serializers.ValidationError('choose another password, min 4 characters')
+            raise serializers.ValidationError({"error":'choose another password, min 4 characters'})
         ##
         if password != confirm_password:
-            raise serializers.ValidationError('confirm password and password must be the same')
+            raise serializers.ValidationError({"error":'confirm password and password must be the same'})
         return attrs
     
 
