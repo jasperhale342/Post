@@ -18,20 +18,22 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ('id', 'username', 'posts', 'password', "confirmPassword")
         extra_kwargs = {'password': {'write_only': True}, 'confirmPassword': {'write_only': True}}
     
-    def validate(self, attrs):
+    def clean(self):
+        attrs = self.cleaned_data
         username = attrs['username'].strip()
-        password = attrs['password'].strip()
+        password = attrs['password'].strip()   
         confirm_password = attrs['confirmPassword'].strip()
         ##
         if not username or User.objects.filter(username=username).exists():
-            raise serializers.ValidationError({"error":'choose another username'})
+            raise serializers.ValidationError({"error":'Please choose another username'})
         ##
         if not password or len(password) < 4:
             raise serializers.ValidationError({"error":'choose another password, min 4 characters'})
         ##
         if password != confirm_password:
             raise serializers.ValidationError({"error":'confirm password and password must be the same'})
-        return attrs
+       
+        return True
     
 
     def create(self, validated_data):

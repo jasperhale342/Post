@@ -7,6 +7,8 @@ import Cookies from "js-cookie";
 import ReactPaginate from "react-paginate";
 import Form from "react-bootstrap/Form";
 import { useRouter } from "next/navigation";
+import api from "./util/axios";
+
 
 
 function Items({ currentItems }) {
@@ -51,24 +53,13 @@ function Home() {
   //   setItemOffset(newOffset);
   // };
   async function deletePost(id) {
-    const res = await axios({
-      method: "DELETE",
-      url: "http://localhost:8000/post/" + id + "/",
-      headers: {
-        "Content-Type": "application/json",
-        "X-CSRFToken": Cookies.get('csrftoken')
-      },
-      withCredentials: true,
-    });
+    const uri = "/post/" + id + "/"
+    const res = await api.delete(uri)
     getPosts()
 
   }
   let getPosts = React.useCallback(async () => {
-    const posts = await axios({
-      method: "GET",
-      url: "http://localhost:8000/posts/",
-      withCredentials: true,
-    });
+    const posts = await api.get("/posts/")
     console.log("hello")
     dataSet(posts.data);
 
@@ -82,16 +73,7 @@ function Home() {
 
   useEffect(() => {
     async function fetchMyAPI() {
-      const res = await axios({
-        method: "GET",
-        url: "http://localhost:8000/current-user/",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        withCredentials: true,
-      });
-
-      console.log(res.data);
+      const res = await api.get("/current-user/")
       setMe(res.data["username"])
     }
 

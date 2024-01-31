@@ -43,7 +43,7 @@ def api_root(request, format=None):
 @authentication_classes((SessionAuthentication,))
 def login_view(request):
     
-
+    print(request.body)
     u = request.data['username']
     p = request.data['password']
     print("username: " + u + " password: ", p)
@@ -98,15 +98,14 @@ class PostList(APIView):
     
     
     def post(self, request, format=None):
+        print(request.data)
+     
         serializer = PostSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(owner=self.request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-    
-    
-
 class PostDetail(APIView):
     """
     Retrieve, update or delete a snippet instance.
@@ -126,11 +125,13 @@ class PostDetail(APIView):
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):
+        print("this is the pk", pk)
         post = self.get_object(pk)
         serializer = PostSerializer(post, data=request.data)
+        self.check_object_permissions(request=request, obj=post)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk, format=None):
@@ -139,25 +140,17 @@ class PostDetail(APIView):
         post.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     
-
-
-
 class UserList(APIView):
     permission_classes = [
         permissions.AllowAny # Or anon users can't register
     ]
 
     def post(self, request, format=None):
-        print(request.body)
-        my_json = request.body.decode('utf8').replace("'", '"')
-        data = json.loads(my_json)
-        serializer = UserSerializer(data=data)
-        print("the serializer is ", serializer.is_valid())
-        print(serializer.errors)
+        serializer = UserSerializer(data=request.data)
+        print(serializer.is_valid())
         if serializer.is_valid():
             user = serializer.save()
             login(request, user)
-            print("saving user")
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

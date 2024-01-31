@@ -1,14 +1,10 @@
 "use client";
 import React, { useState, useEffect } from "react";
-
 import Form from "react-bootstrap/Form";
 import dynamic from "next/dynamic";
-
-import Button from "react-bootstrap/Button";
 import Navbar from "../../components/Navbar";
-import Cookies from "js-cookie";
 import axios from "axios";
-
+import api from "../util/axios";
 import { useRouter } from "next/navigation";
 
 const CreatePost = (props) => {
@@ -26,15 +22,8 @@ const CreatePost = (props) => {
 
   useEffect(() => {
     async function fetchMyAPI() {
-     
-
-      const res = await axios({
-        method: 'GET',
-        url: "http://localhost:8000/current-user/",
-        withCredentials: true
-
-
-      })
+      const res = await api.get("/current-user/")
+      console.log(res)
       data = await res.data
       setUsername(data['id'])
     }
@@ -47,21 +36,14 @@ const CreatePost = (props) => {
     const submitData = { owner, title, content };
 
     try {
-      let myHeaders = new Headers({
-        "Content-Type": "application/json",
-        "X-CSRFToken": Cookies.get('csrftoken')
-      });
-      console.log(submitData)
-      const res = await fetch("http://localhost:8000/posts/", {
-        method: "POST",
-        body: JSON.stringify(submitData),
-        headers: myHeaders,
-        credentials: "include"
 
-      });
-      console.log(res);
-      if (res.ok) {
-        console.log(res);
+      console.log(submitData)
+
+      const res = await api.post("/posts/", JSON.stringify(submitData))
+
+
+      if (res.status == "201") {
+
         setPostMessage(true)
       } else {
         console.log("Oops! Something is wrong.");
@@ -81,7 +63,7 @@ const CreatePost = (props) => {
           <div className="Auth-form-content">
             <Form.Group>
               <div hidden={!postMessage} className="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
-                <span class="font-medium">Success alert!</span> Post Created! Check out the home page
+                <span className="font-medium">Success!</span> Post Created! Check out the home page
               </div>
               <div className="form-group mt-3">
                 <Form.Label className="form-control mt-1">

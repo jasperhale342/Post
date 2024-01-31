@@ -1,21 +1,17 @@
 "use client";
 import React, { useState } from "react";
-
 import Form from "react-bootstrap/Form";
-
 import Button from "react-bootstrap/Button";
 import Navbar from "../../components/Navbar";
-import Cookies from "js-cookie";
-import axios from "axios";
 import { useRouter } from "next/navigation";
+import api from "../util/axios";
 
 export default function Login() {
   const [username, setUsername] = useState("");
   const [error, setErrors] = useState("")
   const router = useRouter();
-
   const [password, setPassword] = useState("");
-  let session = ''
+
 
   function validateForm() {
     return username.length > 0 && password.length > 0;
@@ -27,33 +23,17 @@ export default function Login() {
 
 
     try {
-
-
-      const res = await fetch("http://localhost:8000/login/", {
-        method: "POST",
-        body: JSON.stringify(submitData),
-        headers: {
-          "content-type": "application/json",
-        },
-
-        credentials: "include",
-
-
-      });
-      
-      if (res.ok) {
+      const res = await api.post("/login/", JSON.stringify(submitData))
+      if (res.status == "200") {
         router.push("/");
-
-
       } 
       else {
-     
-      
-        setErrors(await res.json())
+       
+        setErrors(res.data)
       }
     } catch (error) {
-     
     
+    setErrors(error.response.data)
       
     }
 

@@ -7,6 +7,7 @@ import Button from "react-bootstrap/Button";
 import { useRouter } from "next/navigation";
 import Navbar from "../../components/Navbar";
 import axios from "axios";
+import api from "../util/axios";
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -28,16 +29,7 @@ export default function Login() {
 
 
     try {
-      const res = await axios({
-        method: "POST",
-        url: "http://localhost:8000/users/",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        data: JSON.stringify(submitData),
-        withCredentials: true,
-      });
-
+      const res = await api.post("/users/", JSON.stringify(submitData))
 
       if (res.status == '201') {
         console.log("Yeai!");
@@ -51,6 +43,7 @@ export default function Login() {
         console.log(res);
       }
     } catch (error) {
+      console.log(error)
       setErrors(error.response.data.error)
       setPassword("");
       setConfirmPassword("")
