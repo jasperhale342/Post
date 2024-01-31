@@ -159,8 +159,8 @@ REST_FRAMEWORK = {
     
 }
 
-CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS').split(",")
-CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS').split(",")
+CORS_ALLOWED_ORIGINS = [] if os.getenv('CORS_ALLOWED_ORIGINS') is None else os.getenv('CORS_ALLOWED_ORIGINS').split(",")
+CSRF_TRUSTED_ORIGINS = [] if os.getenv('CSRF_TRUSTED_ORIGINS') is None else os.getenv('CSRF_TRUSTED_ORIGINS').split(",")
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_HEADERS = ('x-csrftoken', 'content-type')
