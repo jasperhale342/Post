@@ -63,6 +63,7 @@ const UpdatePost = ({ params }) => {
 
 
   };
+  
   return (
     <div>
       <Navbar></Navbar>

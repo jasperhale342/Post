@@ -4,6 +4,7 @@ import axios from 'axios';
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import api from '@/app/util/axios';
 
 const Navbar = ({checkUser, state}) => {
     const [username, setUsername] = useState("");
@@ -11,15 +12,9 @@ const Navbar = ({checkUser, state}) => {
     const router = useRouter();
     let data = ''
     const logout = async (e) => {
-        const res = await fetch("http://localhost:8000/logout/", {
-            method: "POST",
-            headers: {
-                "content-type": "application/json",
-            },
-            credentials: "include"
-
-        });
-        if (res.ok){
+        const res = await api.post("/logout/")
+       
+        if (res.status == "200"){
             checkUser("")
             setUsername("")
         }
@@ -27,16 +22,9 @@ const Navbar = ({checkUser, state}) => {
     }
     useEffect(() => {
         async function fetchMyAPI() {
+            const res = await api.get("/current-user/")
 
-            const res = await axios({
-                method: 'GET',
-                url: "http://localhost:8000/current-user/",
-                withCredentials: true
-
-
-            })
-            data = await res.data
-            setUsername(data['username'])
+            setUsername(res.data['username'])
         }
 
         fetchMyAPI()
@@ -50,7 +38,7 @@ const Navbar = ({checkUser, state}) => {
                 <ul className='hidden md:flex gap-x-8'>
                     <li className='link'>
                         <Link href='/' >
-                            Home
+                            home
                         </Link>
                     </li>
                     {username ?
