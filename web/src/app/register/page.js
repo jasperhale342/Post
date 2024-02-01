@@ -1,12 +1,9 @@
 "use client";
 import React, { useState } from "react";
-
 import Form from "react-bootstrap/Form";
-
 import Button from "react-bootstrap/Button";
 import { useRouter } from "next/navigation";
 import Navbar from "../../components/Navbar";
-import axios from "axios";
 import api from "../util/axios";
 
 export default function Login() {

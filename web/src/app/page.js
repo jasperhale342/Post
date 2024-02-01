@@ -74,7 +74,7 @@ function Home() {
   useEffect(() => {
     async function fetchMyAPI() {
       const res = await api.get("/current-user/")
-      console.log(process.env.DJ_API)
+      
       setMe(res.data["username"])
     }
 
