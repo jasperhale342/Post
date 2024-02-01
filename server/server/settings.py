@@ -184,4 +184,5 @@ LOGGING = {
         },
     },
 }
+SESSION_SAVE_EVERY_REQUEST=True
 
