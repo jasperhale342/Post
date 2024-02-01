@@ -6,7 +6,7 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation'
 import api from "@/app/util/axios";
 
-const viewPost = ({ params }) => {
+const ViewPost = ({ params }) => {
   const [owner, setUsername] = useState("");
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -102,6 +102,6 @@ const viewPost = ({ params }) => {
   );
 };
 
-export default dynamic(() => Promise.resolve(viewPost), {
+export default dynamic(() => Promise.resolve(ViewPost), {
   ssr: true,
 });

@@ -7,7 +7,7 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation'
 import api from "@/app/util/axios";
 
-const updatePost = ({ params }) => {
+const UpdatePost = ({ params }) => {
   const [owner, setUsername] = useState("");
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -125,6 +125,6 @@ const updatePost = ({ params }) => {
   );
 };
 
-export default dynamic(() => Promise.resolve(updatePost), {
+export default dynamic(() => Promise.resolve(UpdatePost), {
   ssr: true,
 });

@@ -11,18 +11,18 @@ import api from "./util/axios";
 
 
 
-function Items({ currentItems }) {
-  return (
-    <>
-      {currentItems &&
-        currentItems.map((item) => (
-          <div>
-            <h3>Item #{item}</h3>
-          </div>
-        ))}
-    </>
-  );
-}
+// function Items({ currentItems }) {
+//   return (
+//     <>
+//       {currentItems &&
+//         currentItems.map((item) => (
+//           <div>
+//             <h3>Item #{item}</h3>
+//           </div>
+//         ))}
+//     </>
+//   );
+// }
 function printPosts(e) {
   console.log("these are the posts ", e);
 }
@@ -89,8 +89,8 @@ function Home() {
       <Navbar checkUser={checkUser} state={me}></Navbar>
 
       {allPosts
-        ? allPosts.map((post, index) => (
-          <div key={index}>
+        ? allPosts.map((post) => (
+          <div key={post.id}>
             <div className="Auth-form-container">
               <Form className="form-post">
                 <div className="Auth-form-content">
@@ -150,7 +150,7 @@ function Home() {
                 </div>
               </Form>
             </div>
-          </div>
+          </div >
         ))
         : ""}
     </div>
