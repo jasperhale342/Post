@@ -8,7 +8,8 @@ const api = axios.create({
     baseURL,
     withCredentials: true,
     headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Credentials": "true"
     }
 })
 api.interceptors.request.use(function (req) {
