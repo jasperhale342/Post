@@ -9,7 +9,6 @@ const api = axios.create({
     withCredentials: true,
     headers: {
         "Content-Type": "application/json",
-        "Access-Control-Allow-Credentials": "true"
     }
 })
 api.interceptors.request.use(function (req) {
