@@ -163,7 +163,7 @@ CORS_ALLOWED_ORIGINS = [] if os.getenv('CORS_ALLOWED_ORIGINS') is None else os.g
 CSRF_TRUSTED_ORIGINS = [] if os.getenv('CSRF_TRUSTED_ORIGINS') is None else os.getenv('CSRF_TRUSTED_ORIGINS').split(",")
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOW_HEADERS = ('x-csrftoken', 'content-type')
+CORS_ALLOW_HEADERS = ('x-csrftoken', 'content-type', 'Access-Control-Allow-Credentials')
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
