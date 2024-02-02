@@ -53,8 +53,9 @@ def login_view(request):
     print("user is: ", user)
     if user is not None:
         login(request, user)
+        request.session.modified = True 
         serializer = UserSerializer(user)
-       
+        
         return Response(serializer.data, status=status.HTTP_200_OK)
     else:
         errors = {"errors": "username or password is not correct"}
@@ -65,6 +66,7 @@ def login_view(request):
 @authentication_classes(())
 def logout_view(request):
     logout(request)
+    request.session.modified = True 
     return Response(status=status.HTTP_200_OK)
 
     # Redirect to a success page.      
