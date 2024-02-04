@@ -147,7 +147,7 @@ CORS_ALLOW_HEADERS = ('x-csrftoken', 'content-type', 'Access-Control-Allow-Crede
 # Configure the domain name using the environment variable
 # that Azure automatically creates for us.
 ALLOWED_HOSTS = [os.environ['WEBSITE_HOSTNAME']] if 'WEBSITE_HOSTNAME' in os.environ else []
-ALLOWED_HOSTS.append("jasperware.xyz")
+"CUSTOM_DOMAIN" in os.environ and ALLOWED_HOSTS.append(os.environ["CUSTOM_DOMAIN"])
 if 'WEBSITE_HOSTNAME' in os.environ :
     CSRF_TRUSTED_ORIGINS.append('https://' + os.environ['WEBSITE_HOSTNAME'])
 
