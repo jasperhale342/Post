@@ -9,9 +9,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = False
 
-    
-# CSRF_TRUSTED_ORIGINS = ['https://' + os.environ['WEBSITE_HOSTNAME']] if 'WEBSITE_HOSTNAME' in os.environ else []
-
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -140,7 +137,7 @@ REST_FRAMEWORK = {
     
 }
 CORS_ALLOWED_ORIGINS = [os.environ['CORS_ALLOWED_ORIGINS']] if 'CORS_ALLOWED_ORIGINS' in os.environ else []
-CSRF_TRUSTED_ORIGINS = ["https://" + os.environ['CSRF_TRUSTED_ORIGINS']] if 'CSRF_TRUSTED_ORIGINS' in os.environ else []
+CSRF_TRUSTED_ORIGINS = [os.environ['CSRF_TRUSTED_ORIGINS']] if 'CSRF_TRUSTED_ORIGINS' in os.environ else []
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_HEADERS = ('x-csrftoken', 'content-type', 'Access-Control-Allow-Credentials')
@@ -159,4 +156,4 @@ CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE =True
 SESSION_SAVE_EVERY_REQUEST=True
 SESSION_COOKIE_SAMESITE = False
-SESSION_COOKIE_DOMAIN=['https://' + os.environ['FRONTEND_DOMAIN']]
+SESSION_COOKIE_DOMAIN=['.' + os.environ['FRONTEND_DOMAIN']]
