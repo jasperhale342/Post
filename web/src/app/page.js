@@ -73,7 +73,10 @@ function Home() {
 
   useEffect(() => {
     async function fetchMyAPI() {
+      console.log("public url is: " + process.env.NEXT_PUBLIC_DJ_API)
+      console.log("again")
       const res = await api.get("/current-user/")
+      
       
       setMe(res.data["username"])
     }

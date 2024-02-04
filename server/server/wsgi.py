@@ -10,7 +10,7 @@ https://docs.djangoproject.com/en/4.2/howto/deployment/wsgi/
 import os
 from django.core.wsgi import get_wsgi_application
 
-settings_module = 'server.production' if 'WEBSITE_HOSTNAME' in os.environ else 'server.settings'
+settings_module = 'server.settings_production' if 'WEBSITE_HOSTNAME' in os.environ else 'server.settings_development'
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', settings_module)
 
 application = get_wsgi_application()
