@@ -136,29 +136,25 @@ REST_FRAMEWORK = {
     ]
     
 }
-CORS_ALLOWED_ORIGINS = [os.environ['CORS_ALLOWED_ORIGINS']] if 'CORS_ALLOWED_ORIGINS' in os.environ else []
-CSRF_TRUSTED_ORIGINS = [os.environ['CSRF_TRUSTED_ORIGINS']] if 'CSRF_TRUSTED_ORIGINS' in os.environ else []
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOW_HEADERS = ('x-csrftoken', 'content-type', 'Access-Control-Allow-Credentials')
-# Configure the domain name using the environment variable
-# that Azure automatically creates for us.
-ALLOWED_HOSTS = [os.environ['WEBSITE_HOSTNAME']] if 'WEBSITE_HOSTNAME' in os.environ else []
-"CUSTOM_DOMAIN" in os.environ and ALLOWED_HOSTS.append(os.environ["CUSTOM_DOMAIN"])
-if 'WEBSITE_HOSTNAME' in os.environ :
-    CSRF_TRUSTED_ORIGINS.append('https://' + os.environ['WEBSITE_HOSTNAME'])
-
-
-
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 SECURE_SSL_REDIRECT = True
-# CSRF_COOKIE_SECURE = True
-# SESSION_COOKIE_SECURE =True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+ALLOWED_HOSTS = [os.environ['WEBSITE_HOSTNAME']] if 'WEBSITE_HOSTNAME' in os.environ else []
+"CUSTOM_DOMAIN" in os.environ and ALLOWED_HOSTS.append(os.environ["CUSTOM_DOMAIN"])
+
+CORS_ALLOWED_ORIGINS = [os.environ['CORS_ALLOWED_ORIGINS']] if 'CORS_ALLOWED_ORIGINS' in os.environ else []
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_HEADERS = ('x-csrftoken', 'content-type', 'Access-Control-Allow-Credentials')
+
+CSRF_TRUSTED_ORIGINS = [os.environ['CSRF_TRUSTED_ORIGINS']] if 'CSRF_TRUSTED_ORIGINS' in os.environ else []
+CSRF_TRUSTED_ORIGINS.append('https://' + os.environ['WEBSITE_HOSTNAME'])
 CSRF_COOKIE_DOMAIN=[os.environ['CUSTOM_DOMAIN']]
-SESSION_SAVE_EVERY_REQUEST=True
-SESSION_COOKIE_SAMESITE = 'None'
-SESSION_COOKIE_DOMAIN=[os.environ['CUSTOM_DOMAIN']]
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SAMESITE = 'None'
+CSRF_COOKIE_SECURE = True
+
+# SESSION_SAVE_EVERY_REQUEST=True
+SESSION_COOKIE_SAMESITE = os.environ['SESSION_COOKIE_SAMESITE']
+SESSION_COOKIE_DOMAIN=[os.environ['CUSTOM_DOMAIN']]
+SESSION_COOKIE_SECURE = True
+
 
