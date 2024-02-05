@@ -142,11 +142,11 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 ALLOWED_HOSTS = [os.environ['WEBSITE_HOSTNAME']] if 'WEBSITE_HOSTNAME' in os.environ else []
 "CUSTOM_DOMAIN" in os.environ and ALLOWED_HOSTS.append(os.environ["CUSTOM_DOMAIN"])
 
-CORS_ALLOWED_ORIGINS = [os.environ['CORS_ALLOWED_ORIGINS']] if 'CORS_ALLOWED_ORIGINS' in os.environ else []
+CORS_ALLOWED_ORIGINS = os.environ['CORS_ALLOWED_ORIGINS'].split(",")
 CORS_ALLOW_CREDENTIALS = os.environ['CORS_ALLOW_CREDENTIALS'] == 'True'
 CORS_ALLOW_HEADERS = ('x-csrftoken', 'content-type', 'Access-Control-Allow-Credentials')
 
-CSRF_TRUSTED_ORIGINS = [os.environ['CSRF_TRUSTED_ORIGINS']] if 'CSRF_TRUSTED_ORIGINS' in os.environ else []
+CSRF_TRUSTED_ORIGINS = os.environ['CSRF_TRUSTED_ORIGINS'].split(",")
 CSRF_TRUSTED_ORIGINS.append('https://' + os.environ['WEBSITE_HOSTNAME'])
 CSRF_COOKIE_DOMAIN=[os.environ['CSRF_COOKIE_DOMAIN']]
 CSRF_COOKIE_SAMESITE = os.environ['CSRF_COOKIE_SAMESITE']
