@@ -149,7 +149,7 @@ CORS_ALLOW_HEADERS = ('x-csrftoken', 'content-type', 'Access-Control-Allow-Crede
 CSRF_TRUSTED_ORIGINS = [os.environ['CSRF_TRUSTED_ORIGINS']] if 'CSRF_TRUSTED_ORIGINS' in os.environ else []
 CSRF_TRUSTED_ORIGINS.append('https://' + os.environ['WEBSITE_HOSTNAME'])
 CSRF_COOKIE_DOMAIN=[os.environ['CUSTOM_DOMAIN']]
-CSRF_COOKIE_SAMESITE = 'None'
+CSRF_COOKIE_SAMESITE = os.environ['CSRF_COOKIE_SAMESITE']
 CSRF_COOKIE_SECURE = True
 
 # SESSION_SAVE_EVERY_REQUEST=True
