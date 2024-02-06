@@ -170,6 +170,10 @@ REST_FRAMEWORK = {
 }
 
 CORS_ALLOWED_ORIGINS = os.environ['CORS_ALLOWED_ORIGINS'].split(",")
+p = os.environ["MY_SETTING"]
+P2 = os.environ["MY_SETTING2"]
+print(p)
+print(P2)
 print(CORS_ALLOWED_ORIGINS)
 CSRF_TRUSTED_ORIGINS = [os.environ['CSRF_TRUSTED_ORIGINS']] if 'CSRF_TRUSTED_ORIGINS' in os.environ else []
 # SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
