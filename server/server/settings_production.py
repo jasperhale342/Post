@@ -144,7 +144,13 @@ ALLOWED_HOSTS = [os.environ['WEBSITE_HOSTNAME']] if 'WEBSITE_HOSTNAME' in os.env
 
 CORS_ALLOWED_ORIGINS = os.environ['CORS_ALLOWED_ORIGINS'].split(",")
 CORS_ALLOW_CREDENTIALS = os.environ['CORS_ALLOW_CREDENTIALS'] == 'True'
-CORS_ALLOW_HEADERS = ('x-csrftoken', 'content-type', 'Access-Control-Allow-Credentials')
+CORS_ALLOW_HEADERS = ("accept",
+    "authorization",
+    "content-type",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
+    "Access-Control-Allow-Credentials")
 
 CSRF_TRUSTED_ORIGINS = os.environ['CSRF_TRUSTED_ORIGINS'].split(",")
 CSRF_TRUSTED_ORIGINS.append('https://' + os.environ['WEBSITE_HOSTNAME'])
