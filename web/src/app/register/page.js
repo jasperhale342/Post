@@ -29,7 +29,6 @@ export default function Login() {
       const res = await api.post("/users/", JSON.stringify(submitData))
 
       if (res.status == '201') {
-        console.log("Yeai!");
         setErrors("")
         setUsername("");
         setPassword("");

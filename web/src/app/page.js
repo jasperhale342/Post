@@ -8,6 +8,7 @@ import ReactPaginate from "react-paginate";
 import Form from "react-bootstrap/Form";
 import { useRouter } from "next/navigation";
 import api from "./util/axios";
+import Loading from "@/components/loading";
 
 
 
@@ -23,14 +24,12 @@ import api from "./util/axios";
 //     </>
 //   );
 // }
-function printPosts(e) {
-  console.log("these are the posts ", e);
-}
 
 function Home() {
   const [me, setMe] = useState("");
   const [allPosts, dataSet] = useState("");
-  const router = useRouter();
+  const [gotPosts, setGotPosts] = useState(false)
+
   // Here we use item offsets; we could also use page offsets
   // following the API or data you're working with.
   // const [itemOffset, setItemOffset] = useState(0);
@@ -53,17 +52,23 @@ function Home() {
   //   setItemOffset(newOffset);
   // };
   async function deletePost(id) {
+    setGotPosts(false)
     const uri = "/post/" + id + "/"
     const res = await api.delete(uri)
-    getPosts()
+    if(res.status == "200"){
+      getPosts()
+    }
+  
 
   }
   let getPosts = React.useCallback(async () => {
     const posts = await api.get("/posts/")
-    console.log("hello")
-    dataSet(posts.data);
+    if (posts.status == "200"){
+      dataSet(posts.data);
+      setGotPosts(true)
+    }
+   
 
-    router.refresh()
   }, [])
 
   function checkUser (event) {
@@ -73,20 +78,32 @@ function Home() {
 
   useEffect(() => {
     async function fetchMyAPI() {
-      console.log("public url is: " + process.env.NEXT_PUBLIC_DJ_API)
-      console.log("again")
-      const res = await api.get("/current-user/")
+      try {
+        const res = await api.get("/current-user/")
+        setMe(res.data["username"])
+
+      }
+      catch (error) {
+        console.log(error)
+      }
       
-      
-      setMe(res.data["username"])
     }
 
 
     fetchMyAPI();
     getPosts();
-    console.log(allPosts);
-    // console.log("data is: " + data)
   }, [getPosts]);
+
+  if (! gotPosts) {
+    return (<div>
+      <Navbar className="mb-10">
+
+      </Navbar>
+      <Loading className="pt-80">
+
+      </Loading>
+    </div>)
+  }
 
   return (
     <div>
@@ -132,7 +149,7 @@ function Home() {
 
                   </div>
 
-                  {post.owner == me ? <div flex>
+                  {post.owner == me ? <div>
                     <button
                       type="button"
                       className="px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-s-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white"
