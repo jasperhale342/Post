@@ -62,11 +62,18 @@ function Home() {
 
   }
   let getPosts = React.useCallback(async () => {
-    const posts = await api.get("/posts/")
-    if (posts.status == "200"){
-      dataSet(posts.data);
-      setGotPosts(true)
+    try {
+      const posts = await api.get("/posts/")
+      if (posts.status == "200"){
+        dataSet(posts.data);
+        setGotPosts(true)
+      }
+
+    } catch (error) {
+      console.log(error)
     }
+    
+    
    
 
   }, [])

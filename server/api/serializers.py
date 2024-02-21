@@ -1,12 +1,7 @@
+from django.forms import ValidationError
 from rest_framework import serializers
 from .models.Post import Post
 from django.contrib.auth.models import User
-
-    
-
-
-        
-
 
 class UserSerializer(serializers.ModelSerializer):
     posts = serializers.PrimaryKeyRelatedField(many=True, queryset=Post.objects.all(), required=False)
@@ -17,7 +12,7 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'username', 'posts', 'password', "confirmPassword")
         extra_kwargs = {'password': {'write_only': True}, 'confirmPassword': {'write_only': True}}
-    
+
     def clean(self):
         attrs = self.cleaned_data
         username = attrs['username'].strip()
@@ -35,11 +30,8 @@ class UserSerializer(serializers.ModelSerializer):
        
         return True
     
-
     def create(self, validated_data):
-        print(validated_data)
         validated_data.pop('confirmPassword')
-        print(validated_data)
         user = User.objects.create_user(
             username = validated_data['username'],
             password = validated_data['password'],
@@ -47,7 +39,6 @@ class UserSerializer(serializers.ModelSerializer):
         user.save()
         return user
         
-
 class PostSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
     class Meta:

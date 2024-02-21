@@ -97,8 +97,6 @@ class PostList(APIView):
     
     
     def post(self, request, format=None):
-        print(request.data)
-     
         serializer = PostSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(owner=self.request.user)
@@ -146,11 +144,12 @@ class UserList(APIView):
 
     def post(self, request, format=None):
         serializer = UserSerializer(data=request.data)
-        print(serializer.is_valid())
+        print("serializer is: ", serializer.is_valid())
         if serializer.is_valid():
             user = serializer.save()
             login(request, user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
