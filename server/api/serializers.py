@@ -5,33 +5,35 @@ from django.contrib.auth.models import User
 
 class UserSerializer(serializers.ModelSerializer):
     posts = serializers.PrimaryKeyRelatedField(many=True, queryset=Post.objects.all(), required=False)
-    confirmPassword = serializers.CharField(required=False,default='')
+    password2 = serializers.CharField(required=False,default='')
  
     
     class Meta:
         model = User
-        fields = ('id', 'username', 'posts', 'password', "confirmPassword")
-        extra_kwargs = {'password': {'write_only': True}, 'confirmPassword': {'write_only': True}}
+        fields = ('id', 'username', 'posts', 'password', "password2")
+        extra_kwargs = {'password': {'write_only': True}, 'password2': {'write_only': True}}
 
-    def clean(self):
-        attrs = self.cleaned_data
+    def validate(self, attrs):
+
         username = attrs['username'].strip()
         password = attrs['password'].strip()   
-        confirm_password = attrs['confirmPassword'].strip()
+        confirm_password = attrs['password2'].strip()
         ##
-        if not username or User.objects.filter(username=username).exists():
-            raise serializers.ValidationError({"error":'Please choose another username'})
+        if User.objects.filter(username=username).exists():
+            raise serializers.ValidationError({"username":'Please choose another username'})
+        if not username:
+            raise serializers.ValidationError({"username":'Please Enter a username'})
         ##
         if not password or len(password) < 4:
-            raise serializers.ValidationError({"error":'choose another password, min 4 characters'})
+            raise serializers.ValidationError({"password":'choose another password, min 4 characters'})
         ##
         if password != confirm_password:
-            raise serializers.ValidationError({"error":'confirm password and password must be the same'})
+            raise serializers.ValidationError({"password":'confirm password and password must be the same'})
        
-        return True
+        return attrs
     
     def create(self, validated_data):
-        validated_data.pop('confirmPassword')
+        validated_data.pop('password2')
         user = User.objects.create_user(
             username = validated_data['username'],
             password = validated_data['password'],

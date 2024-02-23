@@ -22,13 +22,9 @@ from django.http import HttpResponse
 from rest_framework.authentication import SessionAuthentication
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view, renderer_classes
-from rest_framework.renderers import JSONRenderer, TemplateHTMLRenderer
-from django.http import HttpRequest
 
 
-import json
 
-# Create your views here.
 
 @api_view(['GET'])
 @permission_classes((permissions.AllowAny,))
@@ -42,15 +38,9 @@ def api_root(request, format=None):
 @permission_classes((permissions.AllowAny,))
 @authentication_classes((SessionAuthentication,))
 def login_view(request):
-    
-    print(request.body)
     u = request.data['username']
     p = request.data['password']
-    print("username: " + u + " password: ", p)
-   
-    # print(username + " " + password)
     user = authenticate(request, username=u, password=p)
-    print("user is: ", user)
     if user is not None:
         login(request, user)
         serializer = UserSerializer(user)
@@ -65,8 +55,7 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return Response(status=status.HTTP_200_OK)
-
-    # Redirect to a success page.      
+  
 
 @api_view(['GET'])
 @permission_classes((permissions.AllowAny,))
@@ -77,14 +66,12 @@ def current_user(request):
         serializer= UserSerializer(user, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
     return Response(({"message":"user not signed in"}), status=status.HTTP_200_OK)
-    # Redirect to a success page.     
+    
 
 
 
 class PostList(APIView):
-    """
-    List all posts, or create a post.
-    """
+    
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
     authentication_classes = (SessionAuthentication,)
    
@@ -92,10 +79,7 @@ class PostList(APIView):
         posts = Post.objects.all().order_by('-created_at')
         serializer = PostSerializer(posts, many=True)
         return Response(serializer.data)
-        
-    
-    
-    
+
     def post(self, request, format=None):
         serializer = PostSerializer(data=request.data)
         if serializer.is_valid():
@@ -104,9 +88,7 @@ class PostList(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class PostDetail(APIView):
-    """
-    Retrieve, update or delete a snippet instance.
-    """
+
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
     authentication_classes = (SessionAuthentication,)
     
@@ -144,12 +126,10 @@ class UserList(APIView):
 
     def post(self, request, format=None):
         serializer = UserSerializer(data=request.data)
-        print("serializer is: ", serializer.is_valid())
         if serializer.is_valid():
             user = serializer.save()
             login(request, user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 

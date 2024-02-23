@@ -171,29 +171,13 @@ CORS_ALLOW_HEADERS = ("accept",
     "x-requested-with",
     "Access-Control-Allow-Credentials")
 
-#CSRF_COOKIE_SAMESITE = 'None'
-#CSRF_COOKIE_SECURE = True
+
 CSRF_TRUSTED_ORIGINS = (
     'http://localhost:3000',
     'http://127.0.0.1:3000',
     'https://localhost:3000',
     'https://127.0.0.1:3000'
 )
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-#SECURE_SSL_REDIRECT = False
-# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-# CSRF_COOKIE_DOMAIN=["http://localhost:3000","https://localhost:3000", "http://127.0.0.1:3000","https://127.0.0.1:3000"]
-# CSRF_USE_SESSIONS = False
-# CSRF_COOKIE_HTTPONLY=False
-
-
-
-#SESSION_COOKIE_SAMESITE = 'None'
-#SESSION_COOKIE_SECURE =True
-# SESSION_SAVE_EVERY_REQUEST= True
-
-
-
 
 
 
