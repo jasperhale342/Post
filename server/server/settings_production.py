@@ -148,7 +148,8 @@ CORS_ALLOW_HEADERS = ("accept",
     "user-agent",
     "x-csrftoken",
     "x-requested-with",
-    "Access-Control-Allow-Credentials")
+    "Access-Control-Allow-Credentials",
+    'Access-Control-Allow-Origin')
 
 CSRF_TRUSTED_ORIGINS = os.environ['CSRF_TRUSTED_ORIGINS'].split(",")
 
