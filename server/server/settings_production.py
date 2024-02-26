@@ -37,7 +37,12 @@ MIDDLEWARE = [
     
 ]
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STORAGES = {
+    # ...
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = (str(BASE_DIR.joinpath('static')),)
 ROOT_URLCONF = 'server.urls'
