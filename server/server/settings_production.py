@@ -25,7 +25,6 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     # Add whitenoise middleware after the security middleware
-    "corsheaders.middleware.CorsMiddleware",
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -33,18 +32,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    
+    "corsheaders.middleware.CorsMiddleware",
     
 ]
-SESSION_ENGINE = "django.contrib.sessions.backends.cache"
-STORAGES = {
-    # ...
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-    },
-}
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_DIRS = (str(BASE_DIR.joinpath('static')),)
 ROOT_URLCONF = 'server.urls'
 TEMPLATES = [
     {
@@ -63,10 +53,19 @@ TEMPLATES = [
 ]
 WSGI_APPLICATION = 'server.wsgi.application'
 
-
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 AUTHENTICATION_BACKENDS = [
         'django.contrib.auth.backends.ModelBackend',
     ]
+
+
+STORAGES = {
+    # ...
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
+
 
 # Configure Postgres database based on connection string of the libpq Keyword/Value form
 # https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-CONNSTRING
@@ -135,7 +134,7 @@ REST_FRAMEWORK = {
     ]
     
 }
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 SECURE_SSL_REDIRECT = os.environ['SECURE_SSL_REDIRECT'] == 'True'
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 ALLOWED_HOSTS = [os.environ['WEBSITE_HOSTNAME']] if 'WEBSITE_HOSTNAME' in os.environ else []
@@ -149,8 +148,7 @@ CORS_ALLOW_HEADERS = ("accept",
     "user-agent",
     "x-csrftoken",
     "x-requested-with",
-    "Access-Control-Allow-Credentials",
-    'Access-Control-Allow-Origin')
+    "Access-Control-Allow-Credentials")
 
 CSRF_TRUSTED_ORIGINS = os.environ['CSRF_TRUSTED_ORIGINS'].split(",")
 
@@ -164,5 +162,3 @@ SESSION_SAVE_EVERY_REQUEST =  os.environ['SESSION_SAVE_EVERY_REQUEST'] == 'True'
 SESSION_COOKIE_SAMESITE = os.environ['SESSION_COOKIE_SAMESITE']
 SESSION_COOKIE_DOMAIN=os.environ['SESSION_COOKIE_DOMAIN']
 SESSION_COOKIE_SECURE = os.environ['SESSION_COOKIE_SECURE'] == 'True'
-
-
