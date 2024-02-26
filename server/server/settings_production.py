@@ -36,6 +36,9 @@ MIDDLEWARE = [
     
     
 ]
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 ROOT_URLCONF = 'server.urls'
 TEMPLATES = [
     {
@@ -54,7 +57,7 @@ TEMPLATES = [
 ]
 WSGI_APPLICATION = 'server.wsgi.application'
 
-SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+
 AUTHENTICATION_BACKENDS = [
         'django.contrib.auth.backends.ModelBackend',
     ]
@@ -135,7 +138,7 @@ REST_FRAMEWORK = {
     ]
     
 }
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 SECURE_SSL_REDIRECT = os.environ['SECURE_SSL_REDIRECT'] == 'True'
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 ALLOWED_HOSTS = [os.environ['WEBSITE_HOSTNAME']] if 'WEBSITE_HOSTNAME' in os.environ else []
