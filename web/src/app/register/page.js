@@ -11,7 +11,7 @@ export default function Login() {
 
   const [password, setPassword] = useState("");
 
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [password2, setPassword2] = useState("");
 
   const [error, setErrors] = useState("")
   const router = useRouter()
@@ -22,28 +22,26 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const submitData = { username, password, confirmPassword };
+    const submitData = { username, password, password2 };
 
 
     try {
       const res = await api.post("/users/", JSON.stringify(submitData))
 
       if (res.status == '201') {
-        console.log("Yeai!");
         setErrors("")
-        setUsername("");
-        setPassword("");
-        setConfirmPassword("")
+        // setUsername("");
+        // setPassword("");
+        // setPassword2("")
         
-        router.push("/")
+        // router.push("/")
       } else {
         console.log(res);
       }
     } catch (error) {
-      console.log(error)
-      setErrors(error.response.data.error)
-      setPassword("");
-      setConfirmPassword("")
+
+      setErrors(Object.values(error.response.data)[0][0])
+
     }
 
 
@@ -98,8 +96,8 @@ export default function Login() {
               <Form.Control
                 type="password"
                 className="shadow appearance-none border border-black-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
+                value={password2}
+                onChange={(e) => setPassword2(e.target.value)}
               />
             </Form.Group>
 

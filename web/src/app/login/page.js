@@ -9,8 +9,8 @@ import api from "../util/axios";
 export default function Login() {
   const [username, setUsername] = useState("");
   const [error, setErrors] = useState("")
-  const router = useRouter();
   const [password, setPassword] = useState("");
+  const router = useRouter()
 
 
   function validateForm() {
@@ -24,13 +24,11 @@ export default function Login() {
 
     try {
       const res = await api.post("/login/", JSON.stringify(submitData))
+
       if (res.status == "200") {
-        router.push("/");
+        console.log(res)
+        // router.push("/");
       } 
-      else {
-       
-        setErrors(res.data)
-      }
     } catch (error) {
     
     setErrors(error.response.data)
@@ -51,8 +49,8 @@ export default function Login() {
         <Form className="Auth-form" onSubmit={handleSubmit}>
           <div className="Auth-form-content">
             <Form.Group>
-              <div hidden={!error} class="p-4 mb-4 text-sm text-yellow-800 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300" role="alert">
-                <span class="font-medium">Error!</span> {error.errors}
+              <div hidden={!error} className="p-4 mb-4 text-sm text-yellow-800 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300" role="alert">
+                <span className="font-medium">Error!</span> {error.errors}
               </div>
               <div className="form-group mt-3">
                 <Form.Label className="form-control mt-1">Username</Form.Label>

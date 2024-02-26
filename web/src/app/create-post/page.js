@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import dynamic from "next/dynamic";
 import Navbar from "../../components/Navbar";
-import axios from "axios";
 import api from "../util/axios";
 import { useRouter } from "next/navigation";
 
@@ -23,7 +22,6 @@ const CreatePost = (props) => {
   useEffect(() => {
     async function fetchMyAPI() {
       const res = await api.get("/current-user/")
-      console.log(res)
       data = await res.data
       setUsername(data['id'])
     }
@@ -36,17 +34,12 @@ const CreatePost = (props) => {
     const submitData = { owner, title, content };
 
     try {
-
-      console.log(submitData)
-
       const res = await api.post("/posts/", JSON.stringify(submitData))
-
-
       if (res.status == "201") {
 
         setPostMessage(true)
       } else {
-        console.log("Oops! Something is wrong.");
+        console.log("Error");
       }
     } catch (error) {
       console.log(error);

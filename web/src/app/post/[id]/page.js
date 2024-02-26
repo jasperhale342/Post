@@ -36,7 +36,6 @@ const ViewPost = ({ params }) => {
     }
     getPost()
     fetchMyAPI()
-    console.log("the id is: ", id)
   }, [])
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -46,11 +45,11 @@ const ViewPost = ({ params }) => {
       const uri = "/post/" + id + "/"
       const res = await api.put(uri, JSON.stringify(submitData))
 
-      console.log(res);
+      console.log(res.status == "200");
       if (res.ok) {
         console.log("success");
       } else {
-        console.log("Oops! Something is wrong.");
+        console.log("Error");
       }
     } catch (error) {
       console.log(error);

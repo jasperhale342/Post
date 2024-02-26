@@ -40,7 +40,6 @@ const UpdatePost = ({ params }) => {
     }
     getPost()
     fetchMyAPI()
-    console.log("the id is: ", id)
   }, [])
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -49,13 +48,11 @@ const UpdatePost = ({ params }) => {
     try {
       const uri = "/post/" + id + "/"
       const res = await api.put(uri, JSON.stringify(submitData))
-      
-      console.log(res);
       if (res.status == "200") {
         setPostMessage(true)
         console.log("success");
       } else {
-        console.log("Oops! Something is wrong.");
+        console.log("Error");
       }
     } catch (error) {
       console.log(error);

@@ -9,6 +9,7 @@ node_modules
 .env
 .pg_service.conf
 .my_pgpass
+virtualEnv
 
 # testing
 /coverage
@@ -20,7 +21,7 @@ __pycache__
 
 # misc
 .DS_Store
-.env.local
+.env.*
 .env.development.local
 .env.test.local
 .env.production.local
